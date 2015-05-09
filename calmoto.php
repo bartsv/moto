@@ -350,13 +350,14 @@ $fp=fopen("data.txt", "w");
             $q="SELECT * from calendarioMX1 where data='$d'";
         if(strcmp($class,'MX2')==0)
             $q="SELECT * from calendarioMX2 where data='$d'";
-        echo $q;
+        echo $q.'<br>';
         $sql = $db->prepare($q);
 	   		 $sql->execute();
 	   		 $num=$sql->rowCount();
 			$row=$sql->fetch();
         $id_gara= $row[0];
-        $datagara=$tow[3];
+        $datagara=$row[2];
+        echo $datagara.'<br>';
         if($id_gara==0){
              $date1 = str_replace('-', '/',date('Y-m-d') );
              $tomorrow = date('Y-m-d',strtotime($date1 . "+1 days"));
@@ -364,12 +365,14 @@ $fp=fopen("data.txt", "w");
             $q="SELECT * from calendarioMX1 where data='$tomorrow'";
         if(strcmp($class,'MX2')==0)
             $q="SELECT * from calendarioMX2 where data='$tomorrow'";
-        echo $q;
+        echo $q.'<br>';
         $sql = $db->prepare($q);
 	   		 $sql->execute();
 	   		 $num=$sql->rowCount();
 			$row=$sql->fetch();
         $id_gara= $row[0];
+        $datagara=$row[2];
+        echo $datagara.'<br>';
         }
         echo $num;
         if($num==1){
@@ -451,14 +454,19 @@ $fp=fopen("data.txt", "w");
             }
         }
            $qu= $q.$que;
-        echo $qu;
-		$str="";
-           if(date('Y-m-d')==$datagara && $sessione>0)
-           mysql_query($qu);
-           if($sessione==0 && $tommorow==date('Y-m-d'))
+             $date1 = str_replace('-', '/',date('Y-m-d') );
+             $tomorrow = date('Y-m-d',strtotime($datagara . "-1 days"));
+           echo 'sessione '.$session.'<br>d '.$tomorrow;
+           if(date('Y-m-d')==$datagara && $session>0){
            $db->beginTransaction();
            $sql = $db->exec($qu);
 			 $db->commit();
+          }
+           if($session==0 && $tommorow==date('Y-m-d')){
+             echo 'quai';
+           $db->beginTransaction();
+           $sql = $db->exec($qu);
+			 $db->commit();}
            if(strcmp($class,'MX1')==0){
                 $query="SELECT COUNT(*) FROM  `risultati_gare_MX1`";
 			   $str="MXGP ";
