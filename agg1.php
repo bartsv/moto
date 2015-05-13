@@ -11,6 +11,7 @@ for ($up=0; $up<count($agg); $up++){
         echo"<br>Aggiorno: ".$agg[$up]."</br>";
         $mes=AggiornaCalendario($agg[$up],$mes);
       
+
 	}
 $lung=strlen($mes);
 if($lung>10 && $lung<200)

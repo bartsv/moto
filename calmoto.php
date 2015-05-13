@@ -312,26 +312,28 @@ echo "<br>quaa";
 		               $valore='Class'.$class;
 		                $query="SELECT * FROM  `versioni` where   `nome_vers` ='Class".$class."'";
 		                 $sql = $db->prepare($query);
-	   		 $sql->execute();
-		                 while($row=$sql->fetch()){
+	   		             $sql->execute();
+	   		             $row=$sql->fetch();
 		                    $somma=$row[2]+1;
 		                    $q="UPDATE  `bartolom_motocross`.`versioni` SET  `valore` =  '$somma' WHERE  `versioni`.`id` =".$row[0];
-                                   $pagina = file_get_contents('versione.json');
-                                   $json_output = json_decode($pagina, true);
-                                    $json_output[$valore]=$somma;
-                                    file_put_contents("versione.json", json_encode($json_output));
 		                    echo "<br>qui ".$q;
 		                  $db->beginTransaction();
 		               $sql = $db->exec($q);
 			 		   $db->commit();
 		                  $mes=$mes.$class." World Championship Classification";
 		                      
-		                 }
+		                 
 		          }
           }
           }
+          $qu="SELECT nome_vers,valore FROM versioni";
+			$sql = $db->prepare($qu);
+	   		 $sql->execute();
+	   		 while($e=$sql->fetch(PDO::FETCH_ASSOC))
+	   		        $output[]=$e;
+ 			file_put_contents("versione.json", json_encode($output));
           $db=null;
-$fp=fopen("data.txt", "w");
+$fp=fopen("datagare.txt", "w");
 		if (flock($fp, LOCK_EX)) { // Esegue un lock esclusivo
 		    fwrite($fp, time().'');
 		    flock($fp, LOCK_UN); // rilascia il lock
@@ -456,13 +458,14 @@ $fp=fopen("data.txt", "w");
            $qu= $q.$que;
              $date1 = str_replace('-', '/',date('Y-m-d') );
              $tomorrow = date('Y-m-d',strtotime($datagara . "-1 days"));
-           echo 'sessione '.$session.'<br>d '.$tomorrow;
+           echo $datagara.'sessione '.$session.'<br>d '.$tomorrow;
            if(date('Y-m-d')==$datagara && $session>0){
+           echo'qq';
            $db->beginTransaction();
            $sql = $db->exec($qu);
 			 $db->commit();
           }
-           if($session==0 && $tommorow==date('Y-m-d')){
+           if($session==0 && $tomorrow==date('Y-m-d')){
              echo 'quai';
            $db->beginTransaction();
            $sql = $db->exec($qu);
@@ -485,14 +488,11 @@ $fp=fopen("data.txt", "w");
                 $query="SELECT * FROM  `versioni` where   `nome_vers` ='RG".$class."'";
                  $sql = $db->prepare($query);
 	   		 $sql->execute();
-                 while($row=$sql->fetch()){
+                $row=$sql->fetch();
                     $somma=$row[2]+1;
                     $q="UPDATE  `bartolom_motocross`.`versioni` SET  `valore` =  '$somma' WHERE  `versioni`.`id` =".$row[0];
                     echo "<br>".$q;
-                                   $pagina = file_get_contents('versione.json');
-                                   $json_output = json_decode($pagina, true);
-                                    $json_output[$valore]=$somma;
-                                    file_put_contents("versione.json", json_encode($json_output));
+                                   
                     $db->beginTransaction();
                     $sql = $db->exec($q);
 			 		$db->commit();
@@ -500,11 +500,17 @@ $fp=fopen("data.txt", "w");
                     $mes=$mes.$str."Result of Qualifyng Race";
                      else
                     $mes=$mes.$str."Result of Race".$session." ";
-                 }
+                 
              }
         }
+        $qu="SELECT nome_vers,valore FROM versioni;";
+			$sql = $db->prepare($qu);
+	   		 $sql->execute();
+	   		 while($e=$sql->fetch(PDO::FETCH_ASSOC))
+	   		        $output[]=$e;
+ 			file_put_contents("versione.json", json_encode($output));
         $db=null;
-$fp=fopen("data.txt", "w");
+$fp=fopen("datagare.txt", "w");
 		if (flock($fp, LOCK_EX)) { // Esegue un lock esclusivo
 		    fwrite($fp, time().'');
 		    flock($fp, LOCK_UN); // rilascia il lock

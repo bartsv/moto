@@ -326,7 +326,7 @@ return $mes;
                 $query="SELECT * FROM  `versioni` where   `nome_vers` ='Class".$class."'";
                  $sql = $db->prepare($query);
 	   		 	$sql->execute();
-                 while($row=$sql->fetch()){
+                 $row=$sql->fetch();
                     $somma=$row[2]+1;
                     $q="UPDATE  `bartolom_motocross`.`versioni` SET  `valore` =  '$somma' WHERE  `versioni`.`id` =".$row[0];
                     echo "<br>".$q;
@@ -337,10 +337,25 @@ return $mes;
                      $sql = $db->prepare($q);
 	   		 	$sql->execute();
                    $mes=$mes."World Championship Classification ".$class." ";
-                 }
+                 
           }
           }
           }
+          $qu="SELECT nome_vers,valore FROM versioni;";
+			$sql = $db->prepare($qu);
+	   		 $sql->execute();
+	   		 while($e=$sql->fetch(PDO::FETCH_ASSOC))
+	   		        $output[]=$e;
+ 			file_put_contents("versione.json", json_encode($output));
+        $db=null;
+$fp=fopen("datagare.txt", "w");
+		if (flock($fp, LOCK_EX)) { // Esegue un lock esclusivo
+		    fwrite($fp, time().'');
+		    flock($fp, LOCK_UN); // rilascia il lock
+		} else {
+		    echo "Non si riesce ad eseguire il lock del file !";
+		}
+		fclose($fp);
         $db=null;
         return $mes;
     }
@@ -467,24 +482,34 @@ return $mes;
                 $query="SELECT * FROM  `versioni` where   `nome_vers` ='RG".$class."'";
                  $sql = $db->prepare($query);
 	   		 	$sql->execute();
-                 while($row=$sql->fetch()){
+                $row=$sql->fetch();
                     $somma=$row[2]+1;
                     $q="UPDATE  `bartolom_motocross`.`versioni` SET  `valore` =  '$somma' WHERE  `versioni`.`id` =".$row[0];
                     echo "<br>".$q;
-                                   $pagina = file_get_contents('versione.json');
-                                   $json_output = json_decode($pagina, true);
-                                    $json_output[$valore]=$somma;
-                                    file_put_contents("versione.json", json_encode($json_output));
                 $sql = $db->prepare($q);
 	   		 	$sql->execute();
                 if(strcmp($class,'MX3')==0)
                     $mes=$mes."Result of Race $session EMX125 ";
                if(strcmp($class,'WMX')==0)
                     $mes=$mes."Result of Race $session $class ";
-                 }
+                 
              }
         }
+        $qu="SELECT nome_vers,valore FROM versioni;";
+			$sql = $db->prepare($qu);
+	   		 $sql->execute();
+	   		 while($e=$sql->fetch(PDO::FETCH_ASSOC))
+	   		        $output[]=$e;
+ 			file_put_contents("versione.json", json_encode($output));
         $db=null;
+$fp=fopen("datagare.txt", "w");
+		if (flock($fp, LOCK_EX)) { // Esegue un lock esclusivo
+		    fwrite($fp, time().'');
+		    flock($fp, LOCK_UN); // rilascia il lock
+		} else {
+		    echo "Non si riesce ad eseguire il lock del file !";
+		}
+		fclose($fp);
        return $mes;
     }
 ?>

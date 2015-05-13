@@ -2,7 +2,7 @@
 require_once 'utility/cn_db.php';
 getVersion();
 function getVersion(){
-$filename="data.txt";
+/*$filename="data.txt";
 $fp = fopen($filename, "r");
 $letto=fread($fp, filesize($filename));
 fclose($fp);
@@ -16,11 +16,11 @@ if(strcmp($letto, "")==0){
 		}
 		fclose($fp);
 	$db=dbconn();
-	$qu="SELECT * FROM `versioni`;";
+	$qu="SELECT nome_vers,valore FROM `versioni`;";
 	$sql = $db->prepare($qu);
 	   		 $sql->execute();
-	while($e=$sql->fetch(PDO::FETCH_ASSOC){
-	     $output=$e;
+	while($e=$sql->fetch(PDO::FETCH_ASSOC)){
+	     $output[]=$e;
 	}
 	$db=null;
 	file_put_contents("versione.json", json_encode($output));
@@ -36,16 +36,16 @@ else
 		}
 		fclose($fp);
 	$db=dbconn();
-	$qu="SELECT * FROM `versioni`;";
+	$qu="SELECT nome_vers,valore FROM `versioni`;";
 	$sql = $db->prepare($qu);
 	   		 $sql->execute();
-	while($e=$sql->fetch(PDO::FETCH_ASSOC){
-	     $output=$e;
+	while($e=$sql->fetch(PDO::FETCH_ASSOC)){
+	     $output[]=$e;
 	}
 	$db=null;
 	file_put_contents("versione.json", json_encode($output));
 	}
-         $json_file = file_get_contents('versione.json');
-         echo $json_file
+  */       $json_file = file_get_contents('versione.json');
+         echo $json_file;
 }
 ?>

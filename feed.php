@@ -300,9 +300,6 @@ echo $temp;
 	print_r($stack);
 	echo "<br>mes ".$mes."<br>";
 
-$pagina = file_get_contents("versione.json");
-$json_output = json_decode($pagina, true);
-print_r($json_output);
 	if(count($stack)>0){
 	
 	$db=dbconn();
@@ -310,21 +307,24 @@ print_r($json_output);
 		$query="select valore from versioni where nome_vers = '".$stack[$i]."'";
 		echo $query.'<br>';
                  $c=$stack[$i];
-                 $sql = $db->prepare($query);
-	   		 $sql->execute();
+        $sql = $db->prepare($query);
+	   		 $sql->execute();         
 		$row = $sql->fetch();
 		echo $row[0];
 		$num=$row[0]+1;
-               $json_output[$c]=$num;
 		$query="update versioni  set valore=".$num." where nome_vers = '".$stack[$i]."'";
 		$sql = $db->prepare($query);
 	   		 $sql->execute();
 		echo "versione ora ".$num." versione peima ".$row[0];
 		}
-
- file_put_contents("versione.json", json_encode($json_output));
+		$qu="SELECT nome_vers,valore FROM versioni";
+$sql = $db->prepare($qu);
+	   		 $sql->execute();
+	   		 while($e=$sql->fetch(PDO::FETCH_ASSOC))
+	   		        $output[]=$e;
+ file_put_contents("versione.json", json_encode($output));
 $db=null;
-         $fp=fopen("data.txt", "w");
+         $fp=fopen("datafeed.txt", "w");
 		if (flock($fp, LOCK_EX)) { // Esegue un lock esclusivo
 		    fwrite($fp, time().'');
 		    flock($fp, LOCK_UN); // rilascia il lock

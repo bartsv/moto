@@ -40,16 +40,27 @@ $db=dbconn();
 	$row = $sql->fetch();
 	echo $row[0];
 	$num=$row[0]+1;
-        $pagina = file_get_contents('versione.json');
-$json_output = json_decode($pagina, true);
-print $pagina;
-$json_output[$val]=$num;
- file_put_contents("versione.json", json_encode($json_output));
+	
 	$query="update versioni  set valore=".$num." where nome_vers = '".$stack[$i]."'";
 	$sql = $db->prepare($query);
 	   		 $sql->execute();
 	echo "versione ora ".$num." versione peima ".$row[0];
 	}
+	$qu="SELECT nome_vers,valore FROM versioni";
+			$sql = $db->prepare($qu);
+	   		 $sql->execute();
+	   		 while($e=$sql->fetch(PDO::FETCH_ASSOC))
+	   		        $output[]=$e;
+ 			file_put_contents("versione.json", json_encode($output));
+          $db=null;
+$fp=fopen("data.txt", "w");
+		if (flock($fp, LOCK_EX)) { // Esegue un lock esclusivo
+		    fwrite($fp, time().'');
+		    flock($fp, LOCK_UN); // rilascia il lock
+		} else {
+		    echo "Non si riesce ad eseguire il lock del file !";
+		}
+		fclose($fp);
 $mes=str_replace("videoMX3:","video EMX125:",$mes);
 echo $mes;
 $db=null;
